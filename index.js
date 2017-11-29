@@ -1,11 +1,12 @@
 const request = require('request-promise-native').defaults({jar: true});
 
 module.exports = class addTestFlightUser {
-  constructor(itcLogin, itcPassword, appId) {
+  constructor(itcLogin, itcPassword, appId, groupName) {
     this.loggedIn = false;
     this.itcLogin = itcLogin;
     this.itcPassword = itcPassword;
     this.appId = appId;
+    this.groupName = groupName;
     this.urlITCBase = 'https://itunesconnect.apple.com';
   }
 
@@ -44,8 +45,8 @@ module.exports = class addTestFlightUser {
     this.urlApp = this.urlITCBase + '/testflight/v2/providers' +
       `/${this.contentProviderId}/apps/${this.appId}`;
 
-    //if (!this.groupId)
-    //  this.groupId = await this.getDefaultExternalGroupId()
+    if (!this.groupId)
+      this.groupId = await this.getDefaultExternalGroupId()
 
     this.loggedIn = true;
   }
@@ -57,7 +58,6 @@ module.exports = class addTestFlightUser {
     return account.contentProvider.contentProviderId;
   }
 
-  /*
   async getDefaultExternalGroupId() {
     const content = await request(this.urlApp + '/groups', {json: true});
 
@@ -66,31 +66,22 @@ module.exports = class addTestFlightUser {
         return group.id;
     }
   }
-  */
 
   async addTester(email, firstName, lastName) {
     await this.login();
     let params = {email, firstName, lastName};
-    const content = await request.post({
+    await request.post({
       url: this.urlApp + '/testers',
       headers: {'Content-Type': 'application/json'},
       json: params
     });
-    const testerId = content.data.id;
 
-    return;
-    /*
-    //const groupId = this.groupId;
-    params = {testerId, groupId};
-    const url = this.urlApp + `/groups/${groupId}/testers/${testerId}`;
-    console.log(url);
-    await request.put({
-      url,
-      //url: this.urlApp + '/groups/'+ groupId + '/testers/' + testerId,
-      headers: {'Content-Type': 'application/json'},
-      json: params
-    });
-    */
+    if (this.groupId)
+      await request.post({
+        url: this.urlApp + `/groups/${this.groupId}/testers`,
+        headers: {'Content-Type': 'application/json'},
+        json: [params]
+      });
   }
 
 }
