@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "name": "add-testflight-user",
+  "version": "1.0.0",
+  "description": "Add testflight user in node",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neavend/add-testflight-user.git"
+  },
+  "keywords": [
+    "testflight",
+    "javascript",
+    "node"
+  ],
+  "author": "nSimon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neavend/add-testflight-user/issues"
+  },
+  "homepage": "https://github.com/neavend/add-testflight-user#readme"
+}
